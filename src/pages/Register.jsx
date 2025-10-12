@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ export default function Register() {
     adresse: "",
     code_postal: "",
     ville: "",
-    courriel: "",
+    email: "",
     mot_de_passe: "",
   });
 
@@ -16,14 +17,20 @@ export default function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // TODO: send this data to your Laravel backend
     console.log("Register Data:", formData);
+    await axios
+      .post("http://127.0.0.1:8000/api/register", formData)
+      .then((response) => {
+        console.log("returned data :", response.data);
+      })
+      .catch((err) => console.log(err.response));
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4 pt-16">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-md shadow-md w-full max-w-xl space-y-4"
@@ -97,8 +104,8 @@ export default function Register() {
             <label className="block text-sm font-medium">Courriel</label>
             <input
               type="email"
-              name="courriel"
-              value={formData.courriel}
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               required
               className="mt-1 w-full px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-blue-400"
