@@ -12,13 +12,13 @@ export default function Layout() {
           <div>
             <ul className="flex text-white">
               <li className="ml-5 px-2 py-1">
-                <Link className={"flex"} to={"/"}>
-                  <HomeIcon className={"mx-1"} /> Home page
+                <Link className={"flex"} to={"/login"}>
+                  <LogInIcon className={"mx-1"} /> Login
                 </Link>
               </li>
               <li className="ml-5 px-2 py-1">
-                <Link className={"flex"} to={"/login"}>
-                  <LogInIcon className={"mx-1"} /> Login
+                <Link className={"flex underline"} to={"/register"}>
+                  Register
                 </Link>
               </li>
             </ul>
