@@ -4,6 +4,7 @@ import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Register from "./pages/Register.jsx";
 import Layout from "./layouts/Layout.jsx";
+import Products from "./pages/Products.jsx";
 
 export default function App() {
 
@@ -14,6 +15,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/products" element={<Products />} />
           <Route path="/*" element={<NotFound />} />
         </Route>
       </Routes>
