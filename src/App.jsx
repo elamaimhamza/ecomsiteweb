@@ -1,7 +1,4 @@
-import { useState } from "react";
-// import "./App.css";
-import { Route, RouterProvider, Routes } from "react-router-dom";
-import { router } from "./router/index.jsx";
+import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
@@ -9,7 +6,6 @@ import Register from "./pages/Register.jsx";
 import Layout from "./layouts/Layout.jsx";
 
 export default function App() {
-  const [count, setCount] = useState(0);
 
   return (
     <>
