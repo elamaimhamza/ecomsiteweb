@@ -1,28 +1,55 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const categories = [
   {
     name: "Men",
-    image:
-      "/Logo_homme.jpg",
+    image: "/Logo_homme.jpg",
     query: "male",
   },
   {
     name: "Women",
-    image:
-      "/Logo_femme.webp",
+    image: "/Logo_femme.webp",
     query: "female",
   },
   {
     name: "Kids",
-    image:
-      "/Logo_enfant.avif",
+    image: "/Logo_enfant.avif",
     query: "kids",
   },
 ];
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const verifyUser = async () => {
+      const token = localStorage.getItem("jwt");
+
+      try {
+        const res = await axios.post("http://127.0.0.1:8000/api/user/verify", {
+          api_token: token,
+        });
+
+        // If verification fails on the server side, redirect
+        if (!res.data.valid) {
+          localStorage.removeItem("jwt"); // Optional: clear invalid token
+          navigate("/login");
+        } else {
+          console.log("User verified:", res.data);
+        }
+      } catch (err) {
+        console.error("Verification error:", err);
+        localStorage.removeItem("jwt"); // Optional: clear token on error
+        navigate("/login");
+      }
+    };
+
+    verifyUser();
+  }, [navigate]);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-12">
       <h1 className="text-4xl font-bold text-center mb-10">
