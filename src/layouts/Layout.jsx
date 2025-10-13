@@ -23,7 +23,11 @@ export default function Layout() {
               {loading == false && user ? (
                 <>
                   <li className="ml-5 px-2 py-1 flex items-center">
-                    <UserIcon className="mr-2" /> {user.nom || "User"}
+                    <Link to={"/profile"}>
+                      <div className="flex gap-2">
+                        <UserIcon className="mr-2" /> {user.nom || "User"}
+                      </div>
+                    </Link>
                   </li>
                   <li
                     className="ml-5 px-2 py-1 cursor-pointer"
