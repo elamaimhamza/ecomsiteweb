@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import api from "@/api/axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
@@ -17,10 +15,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Sign In Data:", {
-      email: formData.email,
-      mot_de_passe: formData.mot_de_passe,
-    });
+
     await login(formData.email, formData.mot_de_passe)
       .then(() => {
         toast.success("connexion avec success", {
