@@ -23,7 +23,11 @@ export default function Login() {
     });
     await login(formData.email, formData.mot_de_passe)
       .then(() => {
-        toast.success("connexion avec success");
+        toast.success("connexion avec success", {
+          position: "top-center",
+          dismissible: true,
+          closeButton: true,
+        });
         navigate("/");
       })
       .catch((err) => {
@@ -31,9 +35,16 @@ export default function Login() {
         if (err.response.status == 401) {
           toast.error("Connexion echec", {
             description: err.response.data.message,
+            position: "top-center",
+            dismissible: true,
+            closeButton: true,
           });
         } else {
-          toast.error("Connexion echec");
+          toast.error("Connexion echec", {
+            position: "top-center",
+            dismissible: true,
+            closeButton: true,
+          });
         }
       });
   };
