@@ -23,7 +23,7 @@ const categories = [
 
 const Home = () => {
   const navigate = useNavigate();
-  const { verifyToken } = useAuth();
+  const { verifyToken, user } = useAuth();
 
   useEffect(() => {
     const verify = async () => {
@@ -36,7 +36,12 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 pt-16 pb-12">
       <h1 className="text-4xl font-bold text-center mb-10 pt-4">
-        Bienvenue dans notre Boutique
+        Bienvenue{" "}
+        {user ? (
+          <span className="text-indigo-700">{user.nom}</span>
+        ) : (
+          "dans notre Boutique"
+        )}
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
         {categories.map((cat) => (
