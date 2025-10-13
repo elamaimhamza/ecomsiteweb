@@ -5,17 +5,17 @@ import { Link, useNavigate } from "react-router-dom";
 
 const categories = [
   {
-    name: "Men",
-    image: "/Logo_homme.jpg",
+    name: "Homme",
+    image: "/Logo_homme.avif",
     query: "male",
   },
   {
-    name: "Women",
-    image: "/Logo_femme.webp",
+    name: "Femme",
+    image: "/Logo_femme.avif",
     query: "female",
   },
   {
-    name: "Kids",
+    name: "Enfant",
     image: "/Logo_enfant.avif",
     query: "kids",
   },
@@ -58,7 +58,7 @@ const Home = () => {
             <div className="absolute inset-0 bg-transparent bg-opacity-40 flex flex-col justify-end p-4">
               <h2 className="text-white text-2xl font-semibold">{cat.name}</h2>
               <Button variant="secondary" className="mt-2 w-fit">
-                Shop {cat.name}
+                Voir les produits ...
               </Button>
             </div>
           </Link>
