@@ -1,28 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const categories = [
   {
     name: "Homme",
     image: "/Logo_homme.avif",
-    query: "male",
+    query: "Homme",
   },
   {
     name: "Femme",
     image: "/Logo_femme.avif",
-    query: "female",
+    query: "Femme",
   },
   {
     name: "Enfant",
     image: "/Logo_enfant.avif",
-    query: "kids",
+    query: "Enfant",
   },
 ];
 
 const Home = () => {
-  const navigate = useNavigate();
   const { verifyToken, user } = useAuth();
 
   useEffect(() => {
@@ -46,7 +45,10 @@ const Home = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
         {categories.map((cat) => (
           <Link
-            to={`/products?category=${cat.query}`}
+            to={`/products`}
+            state={{
+              genre: cat.query,
+            }}
             key={cat.name}
             className="group relative block rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
           >
