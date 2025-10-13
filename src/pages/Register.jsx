@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ export default function Register() {
     email: "",
     mot_de_passe: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,6 +28,7 @@ export default function Register() {
       .post("http://127.0.0.1:8000/api/register", formData)
       .then((response) => {
         console.log("returned data :", response.data);
+        navigate("/login");
       })
       .catch((err) => console.log(err.response));
   };

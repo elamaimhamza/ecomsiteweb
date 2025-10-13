@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -23,36 +23,19 @@ const categories = [
 
 const Home = () => {
   const navigate = useNavigate();
+  const { verifyToken } = useAuth();
 
   useEffect(() => {
-    const verifyUser = async () => {
+    const verify = async () => {
       const token = localStorage.getItem("jwt");
-
-      try {
-        const res = await axios.post("http://127.0.0.1:8000/api/user/verify", {
-          api_token: token,
-        });
-
-        // If verification fails on the server side, redirect
-        if (!res.data.valid) {
-          localStorage.removeItem("jwt"); // Optional: clear invalid token
-          navigate("/login");
-        } else {
-          console.log("User verified:", res.data);
-        }
-      } catch (err) {
-        console.error("Verification error:", err);
-        localStorage.removeItem("jwt"); // Optional: clear token on error
-        navigate("/login");
-      }
+      await verifyToken(token);
     };
-
-    verifyUser();
-  }, [navigate]);
+    verify();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-12">
-      <h1 className="text-4xl font-bold text-center mb-10">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 pt-16 pb-12">
+      <h1 className="text-4xl font-bold text-center mb-10 pt-4">
         Bienvenue dans notre Boutique
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
