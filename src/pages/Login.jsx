@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "@/api/axios";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", mot_de_passe: "" });
-
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -14,20 +16,13 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Sign In Data:", formData);
-
-    await axios
-      .post("http://127.0.0.1:8000/api/login", formData)
-      .then((response) => {
-        console.log("returned data :", response.data);
-        // Extract token
-        const token = response.data.data.api_token;
-
-        // Save token in localStorage
-        localStorage.setItem("jwt", token);
-        navigate("/");
-      })
-      .catch((err) => console.log(err.response));
+    console.log("Sign In Data:", {
+      email: formData.email,
+      mot_de_passe: formData.mot_de_passe,
+    });
+    await login(formData.email, formData.mot_de_passe).then(() => {
+      navigate("/");
+    });
   };
 
   return (
