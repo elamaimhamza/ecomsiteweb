@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import api from "@/api/axios";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", mot_de_passe: "" });
@@ -20,9 +21,21 @@ export default function Login() {
       email: formData.email,
       mot_de_passe: formData.mot_de_passe,
     });
-    await login(formData.email, formData.mot_de_passe).then(() => {
-      navigate("/");
-    });
+    await login(formData.email, formData.mot_de_passe)
+      .then(() => {
+        toast.success("connexion avec success");
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log("error status", err.response.status);
+        if (err.response.status == 401) {
+          toast.error("Connexion echec", {
+            description: err.response.data.message,
+          });
+        } else {
+          toast.error("Connexion echec");
+        }
+      });
   };
 
   return (
@@ -48,7 +61,7 @@ export default function Login() {
         <div>
           <label className="block text-sm font-medium">Mot de passe</label>
           <input
-            type="mot_de_passe"
+            type="password"
             name="mot_de_passe"
             required
             value={formData.mot_de_passe}
