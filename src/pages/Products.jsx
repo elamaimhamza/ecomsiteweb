@@ -11,13 +11,13 @@ import {
 } from "@/components/ui/select";
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
 import api from "@/api/axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [priceOrder, setPriceOrder] = useState(""); // 'croissant' or 'decroissant'
   const location = useLocation();
-
+  const navigate = useNavigate();
   useEffect(() => {
     const selectedGenre = location.state?.genre;
     if (selectedGenre) {
@@ -131,7 +131,16 @@ export default function Products() {
               />
               <h3 className="font-semibold text-gray-800">{product.nom}</h3>
               <p className="text-gray-600">{product.prix} €</p>
-              <Button className="mt-auto">Voir</Button>
+              <Button
+                onClick={() => {
+                  navigate("/products/" + product.id, {
+                    state: { id: product.id },
+                  });
+                }}
+                className="mt-auto"
+              >
+                Voir
+              </Button>
             </div>
           ))}
         </section>
