@@ -7,6 +7,7 @@ import Layout from "./layouts/Layout.jsx";
 import Products from "./pages/Products.jsx";
 import Profile from "./pages/Profile.jsx";
 import ProtectedRoute from "./context/ProtectedRoute.jsx";
+import ProductView from "./pages/ProductView.jsx";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<ProductView />} />
           <Route
             path="/profile"
             element={
