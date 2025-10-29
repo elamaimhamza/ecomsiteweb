@@ -1,9 +1,18 @@
+import Cart from "@/components/Cart";
 import { useAuth } from "@/context/AuthContext";
-import { HomeIcon, LogInIcon, LogOutIcon, UserIcon } from "lucide-react";
-import { useEffect } from "react";
+import {
+  HomeIcon,
+  LogInIcon,
+  LogOutIcon,
+  ShoppingCart,
+  UserIcon,
+  X,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
 export default function Layout() {
+  const [isPanierOpen, setIsPanierOpen] = useState(false);
   const { user, logout, loading } = useAuth();
   useEffect(() => {
     console.log("USer", user);
@@ -11,7 +20,7 @@ export default function Layout() {
   return (
     <>
       <header className="relative">
-        <div className="fixed top-0 w-full z-50 items-center justify-between flex bg-gray-800 bg-opacity-90 px-12 py-4 mx-auto ">
+        <div className="fixed top-0 w-full z-[100] items-center justify-between flex bg-gray-800 bg-opacity-90 px-12 py-4 mx-auto ">
           <div className="text-2xl text-white font-semibold inline-flex items-center">
             {/* <Logo /> */}
             <Link to="/">
@@ -19,7 +28,15 @@ export default function Layout() {
             </Link>
           </div>
           <div>
-            <ul className="flex text-white">
+            <ul className="flex items-center text-white">
+              <div
+                onClick={() => {
+                  setIsPanierOpen(!isPanierOpen);
+                }}
+                className="flex w-8 h-8 items-center p-1 bg-neutral-100/50 rounded-sm border border-neutral-200 cursor-pointer hover:bg-neutral-100/20 transition-all duration-150"
+              >
+                <ShoppingCart className=" text-white" />
+              </div>
               {loading == false && user ? (
                 <>
                   <li className="ml-5 px-2 py-1 flex items-center">
@@ -53,8 +70,9 @@ export default function Layout() {
             </ul>
           </div>
         </div>
+        <Cart isPanierOpen={isPanierOpen} setIsPanierOpen={setIsPanierOpen} />
       </header>
-      <main>
+      <main className="relative pt-0">
         <Outlet />
       </main>
     </>

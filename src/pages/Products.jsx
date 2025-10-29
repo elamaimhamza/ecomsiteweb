@@ -118,7 +118,7 @@ export default function Products() {
         </aside>
 
         {/* Product grid */}
-        <section className="flex-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto max-h-[calc(100vh-144px)]">
+        <section className="flex-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 overflow-auto max-h-[calc(100vh-144px)]">
           {sortedProducts.map((product) => (
             <div
               key={product.id}
