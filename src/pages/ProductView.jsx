@@ -79,14 +79,14 @@ export default function ProductView() {
             </div>
 
             <p className="py-4 text-xl font-semibold text-green-600">
-              {product.prix} MAD
+              {product.prix} €
             </p>
 
             <p className="text-gray-700 leading-relaxed">
               {product.description}
             </p>
 
-            <p className="text-sm text-gray-500">
+            {/* <p className="text-sm text-gray-500">
               Stock :{" "}
               <span
                 className={`${
@@ -97,7 +97,7 @@ export default function ProductView() {
                   ? `${product.stock} disponibles`
                   : "Rupture de stock"}
               </span>
-            </p>
+            </p> */}
 
             <Button
               disabled={product.stock === 0}
