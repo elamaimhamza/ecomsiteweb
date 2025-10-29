@@ -13,6 +13,45 @@ export default function ProductView() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const handleAddToCart = () => {
+    const productData = {
+      id: product.id,
+      nom: product.nom,
+      prix: product.prix,
+      quantity: 1,
+    };
+
+    const productJson = JSON.stringify([productData]);
+
+    const panier = localStorage.getItem("panier");
+
+    if (panier && panier.length != 0) {
+      let panierData = JSON.parse(panier); // convertir json au js object (array)
+      const productExists = panierData.some(
+        (product) => product.id == productData.id
+      );
+      if (productExists) {
+        panierData = panierData.map((product) => {
+          if (product.id == productData.id) {
+            return {
+              ...product,
+              quantity: product.quantity + 1,
+            };
+          } else {
+            return { ...product };
+          }
+        });
+      } else {
+        panierData.push(productData); // ajouter ce produit a array dans panier
+      }
+
+      const newPanier = JSON.stringify(panierData); // convertir js object au json
+      localStorage.setItem("panier", newPanier); // stocker les produits au panier
+    } else {
+      localStorage.setItem("panier", [productJson]);
+    }
+  };
+
   useEffect(() => {
     api
       .get(`/produits/${id}`)
@@ -102,6 +141,7 @@ export default function ProductView() {
             <Button
               disabled={product.stock === 0}
               className="mt-4 w-full md:w-auto"
+              onClick={handleAddToCart}
             >
               Ajouter au panier
             </Button>
