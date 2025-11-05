@@ -118,3 +118,32 @@
     @apply bg-background text-foreground;
   }
 }
+
+.centered {
+  @apply flex justify-center items-center
+}
+
+
+/* width */
+.modern-scrollbar::-webkit-scrollbar {
+width: 4px;
+padding: 8px;
+}
+
+/* Track */
+.modern-scrollbar::-webkit-scrollbar-track {
+padding: 8px;
+background: #f1f1f1;
+}
+
+/* Handle */
+.modern-scrollbar::-webkit-scrollbar-thumb {
+background: #888;
+padding: 8px;
+border-radius: 8px;
+}
+
+/* Handle on hover */
+.modern-scrollbar::-webkit-scrollbar-thumb:hover {
+background: #555;
+}

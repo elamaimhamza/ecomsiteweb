@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +9,7 @@ import api from "@/api/axios";
 export default function ProductView() {
   // const { id } = useParams();
   const location = useLocation();
-  const { id } = location.state || {};
+  const { id } = location.state || useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
