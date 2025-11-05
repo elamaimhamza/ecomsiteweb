@@ -14,9 +14,6 @@ import { Link, Outlet } from "react-router-dom";
 export default function Layout() {
   const [isPanierOpen, setIsPanierOpen] = useState(false);
   const { user, logout, loading } = useAuth();
-  useEffect(() => {
-    console.log("USer", user);
-  }, [user]);
   return (
     <>
       <header className="relative">

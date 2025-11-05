@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
+      console.log("TOKEN FOUND",token)
       verifyToken(token);
     } else {
       setLoading(false);

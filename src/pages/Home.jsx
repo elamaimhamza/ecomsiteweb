@@ -27,7 +27,10 @@ const Home = () => {
   useEffect(() => {
     const verify = async () => {
       const token = localStorage.getItem("jwt");
-      await verifyToken(token);
+      if(token){
+        console.log("token verification sent")
+        await verifyToken(token);
+      }
     };
     verify();
   }, []);
