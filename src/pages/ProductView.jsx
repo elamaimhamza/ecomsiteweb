@@ -159,6 +159,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/api/axios";
+import { toast } from "sonner";
 
 export default function ProductView() {
   const location = useLocation();
@@ -181,15 +182,11 @@ export default function ProductView() {
 
     if (panier && panier.length !== 0) {
       let panierData = JSON.parse(panier);
-      const productExists = panierData.some(
-        (p) => p.id === productData.id
-      );
+      const productExists = panierData.some((p) => p.id === productData.id);
 
       if (productExists) {
         panierData = panierData.map((p) =>
-          p.id === productData.id
-            ? { ...p, quantity: p.quantity + 1 }
-            : p
+          p.id === productData.id ? { ...p, quantity: p.quantity + 1 } : p
         );
       } else {
         panierData.push(productData);
@@ -201,8 +198,7 @@ export default function ProductView() {
     }
 
     // ✅ Afficher le message temporaire
-    setShowMessage(true);
-    setTimeout(() => setShowMessage(false), 1500); 
+    toast.success("Produit ajouté avec succès");
   };
 
   useEffect(() => {
@@ -238,11 +234,11 @@ export default function ProductView() {
   return (
     <div className="pt-16 relative">
       {/* ✅ Message de succès (toast simple) */}
-      {showMessage && (
+      {/* {showMessage && (
         <div className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in-out z-[9999] text-center">
           ✅ Produit ajouté avec succès !
         </div>
-      )}
+      )} */}
 
       <div className="flex p-2 absolute">
         <Button variant="outline" onClick={() => window.history.back()}>
@@ -298,4 +294,3 @@ export default function ProductView() {
     </div>
   );
 }
-

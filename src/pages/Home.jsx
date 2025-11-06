@@ -36,7 +36,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 pt-16 pb-12">
+    <div className="min-h-screen bg-blue-50 flex flex-col items-center justify-center px-4 pt-16 pb-12">
       <h1 className="text-4xl font-bold text-center mb-10 pt-4">
         Bienvenue{" "}
         {user ? (
@@ -53,7 +53,7 @@ const Home = () => {
               genre: cat.query,
             }}
             key={cat.name}
-            className="group relative block rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
+            className="group relative block rounded-lg overflow-hidden shadow-lg  hover:shadow-2xl transition-shadow duration-300"
           >
             <img
               src={cat.image}

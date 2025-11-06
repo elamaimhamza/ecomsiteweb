@@ -1,7 +1,7 @@
 import { Minus, Plus, Trash, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "sonner";
 
 export default function Cart({ isPanierOpen, setIsPanierOpen }) {
   const [products, setProducts] = useState([]);
@@ -26,6 +26,7 @@ export default function Cart({ isPanierOpen, setIsPanierOpen }) {
       setProducts(panierData);
     } else {
       setProducts([]);
+      setTotal();
     }
   };
 
@@ -70,6 +71,8 @@ export default function Cart({ isPanierOpen, setIsPanierOpen }) {
     const newPanier = JSON.stringify(panierData);
     localStorage.setItem("panier", newPanier);
     getProductsFromCart();
+
+    toast.warning("vous avez supprimer le produit du panier");
   };
 
   useEffect(() => {
@@ -103,8 +106,8 @@ export default function Cart({ isPanierOpen, setIsPanierOpen }) {
             </div>
           </div>
         </div>
-        <div className=" px-4 overflow-hidden h-full flex-1 ">
-          <div className="flex flex-col items-center gap-2   max-h-[400px] overflow-auto modern-scrollbar">
+        <div className=" px-4 overflow-hidden h-full flex-1 flex flex-col">
+          <div className="flex flex-1 flex-col items-center gap-2 max-h-[400px] overflow-auto modern-scrollbar">
             {/* Product card */}
             {products.length > 0 ? (
               products.map((product) => (
@@ -185,10 +188,12 @@ export default function Cart({ isPanierOpen, setIsPanierOpen }) {
               </div>
             )}
           </div>
-          {total && (
+          {total ? (
             <div className="flex justify-end text-end pt-4 pb-6">
               <p className="font-semibold">Total : {total} €</p>
             </div>
+          ) : (
+            ""
           )}
         </div>
       </div>

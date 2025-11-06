@@ -39,7 +39,7 @@ export default function Register() {
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-md shadow-md w-full max-w-xl space-y-4"
       >
-        <h2 className="text-2xl font-bold text-center">Créer un compte</h2>
+        <h2 className="text-2xl text-sky-800 font-bold text-center">Créer un compte</h2>
         <p className="text-sm font-semibold mb-2 text-red-400">
           Tout les champs sont obligatoires :
         </p>
@@ -109,6 +109,7 @@ export default function Register() {
             <input
               type="email"
               name="email"
+              placeholder="you@example.com"
               value={formData.email}
               onChange={handleChange}
               required
@@ -129,7 +130,7 @@ export default function Register() {
           </div>
         </div>
 
-        <Button type="submit" className="w-full mt-4">
+        <Button type="submit" className="w-full bg-sky-800 mt-4">
           S'inscrire
         </Button>
       </form>
