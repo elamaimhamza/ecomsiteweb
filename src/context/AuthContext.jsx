@@ -6,17 +6,26 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const token = localStorage.getItem("jwt");
 
   // Load user from localStorage and verify token
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      console.log("TOKEN FOUND",token)
       verifyToken(token);
     } else {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      verifyAdmin(token);
+    } else {
+      setIsAdmin(false);
+    }
+  }, [token]);
 
   const verifyToken = async (token) => {
     try {
@@ -29,14 +38,12 @@ export const AuthProvider = ({ children }) => {
       );
 
       if (res.data?.valid) {
-        console.log("Valid Data from verify", res.data);
         const resData = res.data.data;
         const userData = {
           prenom: resData.prenom,
           nom: resData.nom,
           email: resData.email,
         };
-        console.log("USERDATA", userData);
         setUser(userData); // assuming backend returns { valid: true, user: {...} }
       } else {
         logout();
@@ -53,7 +60,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.post("/login", { email, mot_de_passe });
       const data = res.data;
-      console.log("Loggeding", data);
       if (data.data.api_token) {
         const resData = data.data;
         const userData = {
@@ -61,11 +67,10 @@ export const AuthProvider = ({ children }) => {
           nom: resData.nom,
           email: resData.email,
         };
-        console.log("token", data.data);
-        console.log("userData", userData);
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("jwt", data.data.api_token);
         setUser(userData);
+        verifyAdmin(data.data.api_token);
       }
 
       return data;
@@ -75,6 +80,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const verifyAdmin = async (token) => {
+    await api
+      .get("/user", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.user.type_utilisateur == "Gestionnaire") {
+          setIsAdmin(true);
+        }
+      });
+  };
+
   const logout = () => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("user");
@@ -82,7 +100,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, verifyToken }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, loading, verifyToken, isAdmin }}
+    >
       {children}
     </AuthContext.Provider>
   );
