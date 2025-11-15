@@ -97,7 +97,7 @@ export default function ProductView() {
         {/* Image produit */}
         <div className="flex justify-center">
           <img
-            src={`http://localhost:8000/storage/${product.image}`}
+            src={`${product.image}`}
             alt={product.nom}
             className="w-full max-w-md rounded-2xl object-cover shadow-md"
           />
