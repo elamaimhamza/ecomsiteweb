@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
-import productImage from "/Logo_femme.avif";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -125,7 +124,7 @@ export default function Products() {
               className="bg-white border rounded-md shadow-sm p-4 flex flex-col"
             >
               <img
-                src={`http://localhost:8000/storage/${product.image}`}
+                src={`${product.image}`}
                 alt={product.name}
                 className="w-full h-full object-contain rounded mb-3"
               />
