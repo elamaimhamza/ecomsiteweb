@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,8 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/api/axios";
 import { toast } from "sonner";
-import { SquarePen } from "lucide-react";
+import { Loader2, SquarePen, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function ProductView() {
   const { isAdmin } = useAuth();
@@ -15,6 +17,9 @@ export default function ProductView() {
   const { id } = location.state || useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
+  const token = localStorage.getItem("jwt");
 
   const handleAddToCart = () => {
     const productData = {
@@ -45,6 +50,29 @@ export default function ProductView() {
 
     // ✅ Afficher le message temporaire
     toast.success("Produit ajouté avec succès");
+  };
+
+  const handleEditProduct = () => {
+    setEditLoading(true);
+    api
+      .put(
+        `/produit/${id}`,
+        {
+          prix: product.prix,
+          description: product.description,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(() => {
+        toast.success("produit est modifié avec succès !");
+      })
+      .catch((err) => {
+        toast.error("pas de modification !");
+      })
+      .finally(() => {
+        setEditMode(false);
+        setEditLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -80,13 +108,6 @@ export default function ProductView() {
 
   return (
     <div className="pt-16 relative">
-      {/* ✅ Message de succès (toast simple) */}
-      {/* {showMessage && (
-        <div className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in-out z-[9999] text-center">
-          ✅ Produit ajouté avec succès !
-        </div>
-      )} */}
-
       <div className="flex p-2 absolute">
         <Button variant="outline" onClick={() => window.history.back()}>
           &larr; Retour aux produits
@@ -109,16 +130,32 @@ export default function ProductView() {
             <div className="pt-6 pb-2">
               <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-bold">{product.nom}</h1>
-                {isAdmin && (
+                {isAdmin & !editMode ? (
                   <span>
-                    <SquarePen />
+                    <SquarePen
+                      onClick={() => {
+                        setEditMode(!editMode);
+                      }}
+                      className="cursor-pointer hover:text-neutral-700 duration-150 transition-all"
+                    />
                   </span>
+                ) : isAdmin & editMode ? (
+                  <span
+                    onClick={() => {
+                      setEditMode(!editMode);
+                    }}
+                    className="cursor-pointer hover:text-neutral-700 duration-150 transition-all"
+                  >
+                    <X />
+                  </span>
+                ) : (
+                  ""
                 )}
               </div>
               <p className="text-gray-500 mt-1">{product.marque}</p>
             </div>
 
-            <div className="flex items-center gap-2 ">
+            <div className="flex items-center gap-2">
               <Badge variant="secondary">
                 {product.genre?.nom || "Genre inconnu"}
               </Badge>
@@ -126,22 +163,69 @@ export default function ProductView() {
                 {product.type_produit?.nom || "Type inconnu"}
               </Badge>
             </div>
+            {editMode ? (
+              <div className="my-1">
+                <Input
+                  type="number"
+                  min={0}
+                  value={product.prix}
+                  onChange={(target) => {
+                    console.log("value ", target.target.value);
+                    setProduct({ ...product, prix: target.target.value });
+                  }}
+                  required
+                />
+              </div>
+            ) : (
+              <p className="py-4 text-xl font-semibold text-green-600">
+                {product.prix} €
+              </p>
+            )}
 
-            <p className="py-4 text-xl font-semibold text-green-600">
-              {product.prix} €
-            </p>
-
-            <p className="text-gray-700 leading-relaxed">
-              {product.description}
-            </p>
-
-            <Button
-              disabled={product.stock === 0}
-              className="mt-4 w-full md:w-auto"
-              onClick={handleAddToCart}
-            >
-              Ajouter au panier
-            </Button>
+            {editMode ? (
+              <div className="my-1">
+                <Textarea
+                  value={product.description}
+                  onChange={(target) => {
+                    console.log("value ", target.target.value);
+                    setProduct({
+                      ...product,
+                      description: target.target.value,
+                    });
+                  }}
+                />
+              </div>
+            ) : (
+              <p className="text-gray-700 leading-relaxed">
+                {product.description}
+              </p>
+            )}
+            {editMode ? (
+              <Button
+                disabled={product.stock === 0}
+                className="mt-4 w-full md:w-auto flex gap-1 bg-green-600 hover:bg-green-700 cursor-pointer"
+                onClick={handleEditProduct}
+              >
+                {editLoading ? (
+                  <>
+                    <span>
+                      <Loader2 className="animate-spin" />
+                    </span>
+                    <span>Modification ...</span>
+                  </>
+                ) : (
+                  <span>Modifier</span>
+                )}
+              </Button>
+            ) : (
+              <Button
+                disabled={product.stock === 0}
+                className="mt-4 w-full md:w-auto"
+                onClick={handleAddToCart}
+              >
+                Ajouter au panier
+              </Button>
+            )}
           </CardContent>
         </Card>
       </div>

@@ -13,7 +13,7 @@ import { Link, Outlet } from "react-router-dom";
 
 export default function Layout() {
   const [isPanierOpen, setIsPanierOpen] = useState(false);
-  const { user, logout, loading } = useAuth();
+  const { user, logout, loading, isAdmin } = useAuth();
   return (
     <>
       <header className="relative">
@@ -24,6 +24,11 @@ export default function Layout() {
               <HomeIcon />
             </Link>
           </div>
+          {isAdmin && (
+            <div className="absolute text-white right-1/2 translate-x-1/2">
+              Espace Admin
+            </div>
+          )}
           <div>
             <ul className="flex items-center text-white">
               <div
