@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import api from "@/api/axios";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -22,15 +24,22 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: send this data to your Laravel backend
-    console.log("Register Data:", formData);
-    await axios
-      .post("http://127.0.0.1:8000/api/register", formData)
-      .then((response) => {
-        console.log("returned data :", response.data);
+
+    await api
+      .post("/register", formData)
+      .then(() => {
+        toast.success("Utilisateur créé avec succès");
         navigate("/login");
       })
-      .catch((err) => console.log(err.response));
+      .catch((err) => {
+        if (
+          err.response.data.errors.email == "The email has already been taken."
+        ) {
+          toast.error("Adresse email déjà enregistrée");
+        } else {
+          toast.error("error dans la creation du compte");
+        }
+      });
   };
 
   return (
@@ -39,7 +48,9 @@ export default function Register() {
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-md shadow-md w-full max-w-xl space-y-4"
       >
-        <h2 className="text-2xl text-sky-800 font-bold text-center">Créer un compte</h2>
+        <h2 className="text-2xl text-sky-800 font-bold text-center">
+          Créer un compte
+        </h2>
         <p className="text-sm font-semibold mb-2 text-red-400">
           Tout les champs sont obligatoires :
         </p>

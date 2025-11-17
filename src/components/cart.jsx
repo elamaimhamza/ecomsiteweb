@@ -1,3 +1,4 @@
+import api from "@/api/axios";
 import { Minus, Plus, Trash, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,10 +8,25 @@ export default function Cart({ isPanierOpen, setIsPanierOpen }) {
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState();
   const navigate = useNavigate();
-  const getProductsFromCart = () => {
+
+  const getProductsFromCart = async () => {
     const panier = localStorage.getItem("panier");
     if (panier && panier.length != 0) {
       let panierData = JSON.parse(panier); // convertir json au js object (array)
+      const produitsIds = panierData.map((p) => p.id);
+
+      await api
+        .post("/produits/list", { produitsIds: produitsIds })
+        .then((res) => {
+          const newProduits = res.data.produits;
+          panierData = panierData.map((p) => {
+            return {
+              ...p,
+              prix: newProduits.find((newP) => newP.id == p.id).prix,
+            };
+          });
+        });
+
       let calculateTotal = 0;
       panierData = panierData.map((produit) => ({
         ...produit,
