@@ -1,7 +1,8 @@
 import axios from "axios";
-
+const API = import.meta.env.VITE_API_URL;
+console.log("API ", API);
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api", // change to your backend base URL
+  baseURL: API, // change to your backend base URL
   headers: {
     "Content-Type": "application/json",
   },
