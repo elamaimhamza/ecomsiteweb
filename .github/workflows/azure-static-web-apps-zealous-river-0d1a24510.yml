@@ -45,7 +45,7 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env:
           # --- Environment Variable Added Here ---
-          VITE_API_URL: ${{ secrets.VAPI_API_URL_SECRET }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL_SECRET }}
           # --------------------------------------
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
