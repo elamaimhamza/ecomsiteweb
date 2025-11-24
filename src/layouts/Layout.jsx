@@ -1,4 +1,4 @@
-import Cart from "@/components/Cart";
+import Cart from "@/components/cart";
 import { useAuth } from "@/context/AuthContext";
 import {
   HomeIcon,
@@ -22,6 +22,7 @@ export default function Layout() {
             {/* <Logo /> */}
             <Link to="/">
               <HomeIcon />
+              
             </Link>
           </div>
           {isAdmin && (
