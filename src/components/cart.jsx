@@ -149,7 +149,7 @@ export default function Cart({ isPanierOpen, setIsPanierOpen }) {
                       <div className="centered gap-1">
                         <span className="flex justify-end gap-1 flex-1">
                           <div className="pr-2 flex gap-1">
-                            <p>quantity :</p>
+                            <p>quantité :</p>
                             <span className="border rounded bg-neutral-900 border-neutral-100 w-8 h-8 font-bold flex centered">
                               <p className="text-center  text-white">
                                 {product?.quantity}

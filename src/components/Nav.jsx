@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import {
   HomeIcon,
+  Layout,
   LogInIcon,
   LogOutIcon,
   ShoppingCart,
@@ -18,15 +19,24 @@ export default function Nav() {
     <div>
       <header className="relative">
         <div className="fixed top-0 w-full z-[100] items-center justify-between flex bg-gray-800 bg-opacity-90 px-12 py-4 mx-auto ">
-          <div className="text-2xl text-white font-semibold inline-flex items-center">
+          <div className="text-2xl text-white font-semibold inline-flex items-center gap-2">
             {/* <Logo /> */}
             <Link to="/">
               <HomeIcon />
             </Link>
+            {/* {isAdmin && (
+              
+            )} */}
           </div>
           {isAdmin && (
             <div className="absolute text-white right-1/2 translate-x-1/2">
-              Espace Admin
+              <Link
+                to="/admin"
+                className="flex items-center gap-2 rounded-md px-3 py-2 bg-indigo-500 hover:bg-indigo-400 duration-200 text-zinc-100"
+              >
+                <span>Admin dashboard</span>
+                <Layout />
+              </Link>
             </div>
           )}
           <div>

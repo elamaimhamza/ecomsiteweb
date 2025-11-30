@@ -8,6 +8,9 @@ import Products from "./pages/Products.jsx";
 import Profile from "./pages/Profile.jsx";
 import ProtectedRoute from "./context/ProtectedRoute.jsx";
 import ProductView from "./pages/ProductView.jsx";
+import AdminLayout from "./layouts/AdminLayout.jsx";
+import AdminRoute from "./context/AdminRoute.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 
 export default function App() {
   return (
@@ -28,6 +31,17 @@ export default function App() {
             }
           />
           <Route path="/*" element={<NotFound />} />
+        </Route>
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          {/* <Route path="users" element={<AdminUsers />} /> */}
         </Route>
       </Routes>
     </>
