@@ -1,12 +1,10 @@
+import { useNavigate } from "react-router-dom";
+
 export default function AdminDashboard() {
+  const navigate = useNavigate();
+
   return (
     <div className="space-y-6">
-      {/* HEADER */}
-      <h2 className="text-2xl font-bold">Welcome to the Admin Dashboard</h2>
-      <p className="text-gray-600">
-        Here you can manage users, view statistics, and control the platform.
-      </p>
-
       {/* STATS CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-white p-5 rounded-lg shadow">
@@ -30,13 +28,18 @@ export default function AdminDashboard() {
         <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
 
         <div className="flex items-center gap-4">
-          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            View Users
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            onClick={() => {
+              navigate("/admin/produits");
+            }}
+          >
+            View Produits
           </button>
 
-          <button className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800">
+          {/* <button className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800">
             Manage Settings
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

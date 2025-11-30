@@ -1,42 +1,57 @@
-import { Outlet, Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
 
 export default function AdminLayout() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* SIDEBAR */}
       <aside className="w-64 bg-white shadow-md p-5 flex flex-col">
         <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
 
-        <nav className="flex flex-col gap-3">
-          <Link
-            to="/admin"
-            className="text-gray-700 hover:bg-gray-200 px-3 py-2 rounded-md"
-          >
-            Dashboard
-          </Link>
-
-          <Link
-            to="/admin/users"
-            className="text-gray-700 hover:bg-gray-200 px-3 py-2 rounded-md"
-          >
-            Users
-          </Link>
-
-          <Link
-            to="/"
-            className="text-gray-700 hover:bg-gray-200 px-3 py-2 rounded-md mt-10"
-          >
-            Back to Site
-          </Link>
+        <nav className="flex flex-col justify-between h-full gap-3">
+          <div className="flex flex-col gap-2">
+            <NavLink
+              to="/admin"
+              className={({ isActive }) =>
+                `text-gray-700  px-3 py-2 rounded-sm ${
+                  isActive
+                    ? "bg-zinc-800 text-white"
+                    : "bg-transparent hover:bg-zinc-200"
+                }`
+              }
+              end
+            >
+              Dashboard
+            </NavLink>
+            <NavLink
+              to="/admin/produits"
+              className={({ isActive }) =>
+                `text-gray-700  px-3 py-2 rounded-sm ${
+                  isActive
+                    ? "bg-zinc-800 text-white"
+                    : "bg-transparent hover:bg-zinc-200"
+                }`
+              }
+            >
+              Produits
+            </NavLink>
+          </div>
+          <div>
+            <Button
+              variant="outline"
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Retour à la page principale
+            </Button>
+          </div>
         </nav>
       </aside>
 
       {/* MAIN CONTENT */}
       <div className="flex-1 p-6">
-        <header className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold">Admin Dashboard</h1>
-        </header>
-
         <main>
           <Outlet />
         </main>

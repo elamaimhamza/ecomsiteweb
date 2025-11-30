@@ -10,7 +10,8 @@ import ProtectedRoute from "./context/ProtectedRoute.jsx";
 import ProductView from "./pages/ProductView.jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
 import AdminRoute from "./context/AdminRoute.jsx";
-import AdminDashboard from "./pages/AdminDashboard.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import ProductTable from "./pages/admin/ProductList.jsx";
 
 export default function App() {
   return (
@@ -41,7 +42,7 @@ export default function App() {
           }
         >
           <Route index element={<AdminDashboard />} />
-          {/* <Route path="users" element={<AdminUsers />} /> */}
+          <Route path="produits" element={<ProductTable />} />
         </Route>
       </Routes>
     </>
