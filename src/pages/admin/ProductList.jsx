@@ -1,52 +1,17 @@
-import React, { useState } from "react";
-
-// 1. Mock Data (replace this with your actual API fetch)
-const initialProducts = [
-  {
-    id: 1,
-    name: "Laptop Pro X",
-    category: "Electronics",
-    price: 1299.99,
-    stock: 15,
-  },
-  {
-    id: 2,
-    name: "Wireless Mouse",
-    category: "Accessories",
-    price: 25.5,
-    stock: 150,
-  },
-  {
-    id: 3,
-    name: "Mechanical Keyboard",
-    category: "Accessories",
-    price: 85.0,
-    stock: 75,
-  },
-  {
-    id: 4,
-    name: '4K Monitor 27"',
-    category: "Electronics",
-    price: 450.0,
-    stock: 30,
-  },
-  {
-    id: 5,
-    name: "Webcam HD",
-    category: "Peripherals",
-    price: 49.99,
-    stock: 90,
-  },
-];
+import api from "@/api/axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProductTable = () => {
-  const [products, setProducts] = useState(initialProducts);
-
+  const token = localStorage.getItem("jwt");
+  const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
   // 2. Action Handlers (these would typically open a modal or navigate to a new page)
   const handleEdit = (productId) => {
     console.log("Editing product:", productId);
     // Logic to open an edit form or navigate
-    alert(`Editing Product ID: ${productId}`);
+    // alert(`Editing Product ID: ${productId}`);
+    navigate("/admin/produits/edit/" + productId);
   };
 
   const handleDelete = (productId) => {
@@ -60,6 +25,27 @@ const ProductTable = () => {
       setProducts(products.filter((product) => product.id !== productId));
     }
   };
+  const fetchProducts = async () => {
+    await api
+      .get("/admin/produits", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => {
+        console.log("produiuts", res.data.data);
+        const productsData = res.data.data;
+        if (productsData) {
+          setProducts(productsData.data);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <div className="p-0  min-h-full">
@@ -107,13 +93,13 @@ const ProductTable = () => {
                   {product.id}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                  {product.name}
+                  {product.nom}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                  {product.category}
+                  {product?.type_produit?.nom}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                  ${product.price.toFixed(2)}
+                  ${product.prix}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <span

@@ -12,6 +12,7 @@ import AdminLayout from "./layouts/AdminLayout.jsx";
 import AdminRoute from "./context/AdminRoute.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import ProductTable from "./pages/admin/ProductList.jsx";
+import ProductEdit from "./pages/admin/ProductEdit.jsx";
 
 export default function App() {
   return (
@@ -43,6 +44,7 @@ export default function App() {
         >
           <Route index element={<AdminDashboard />} />
           <Route path="produits" element={<ProductTable />} />
+          <Route path="produits/edit/:id" element={<ProductEdit />} />
         </Route>
       </Routes>
     </>
