@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 // --- Données et Types Mock (Traduites en Français) ---
 
@@ -225,6 +226,23 @@ const ProductEdit = () => {
         genre_id: product?.genre_id,
         type_produit_id: product?.type_produit_id,
       };
+
+      await api
+        .put(
+          "/admin/produits/" + id,
+          {
+            ...dataToSend,
+          },
+          { headers: { Authorization: "Bearer " + token } }
+        )
+        .then((res) => {
+          console.log(res.data);
+          toast.success("Produit enregistré avec succès !");
+        })
+        .catch((err) => {
+          console.error("Error :", err);
+          toast.error("Erreur lors de l'enregistrement du produit.");
+        });
       console.log("Produit mis à jour avec succès! Données:", dataToSend);
       setIsSaved(true);
     } catch (error) {
@@ -258,11 +276,11 @@ const ProductEdit = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
             {/* Champ Nom du Produit */}
             <div>
-              <Label htmlFor="name">Nom du Produit</Label>
+              <Label htmlFor="nom">Nom du Produit</Label>
               <Input
                 type="text"
-                id="name"
-                name="name"
+                id="nom"
+                name="nom"
                 value={product?.nom}
                 onChange={handleChange}
                 required
