@@ -1,6 +1,13 @@
 import api from "@/api/axios";
+import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { toast } from "sonner";
 
 const ProductTable = () => {
   const token = localStorage.getItem("jwt");
@@ -8,21 +15,25 @@ const ProductTable = () => {
   const navigate = useNavigate();
   // 2. Action Handlers (these would typically open a modal or navigate to a new page)
   const handleEdit = (productId) => {
-    console.log("Editing product:", productId);
     // Logic to open an edit form or navigate
-    // alert(`Editing Product ID: ${productId}`);
     navigate("/admin/produits/edit/" + productId);
   };
 
-  const handleDelete = (productId) => {
-    console.log("Deleting product:", productId);
-    // Confirmation dialog and then filter the list
-    if (
-      window.confirm(
-        `Are you sure you want to delete product ID: ${productId}?`
-      )
-    ) {
-      setProducts(products.filter((product) => product.id !== productId));
+  const handleDelete = async (id) => {
+    // Optional: Add a loading state here if you want
+    try {
+      await api.delete(`/admin/produits/${id}`, {
+        headers: { Authorization: "Bearer " + token },
+      });
+
+      // Update the local state to remove the item from the table immediately
+      setProducts((prevProducts) => prevProducts.filter((p) => p.id !== id));
+
+      // Optional: Add a toast notification
+      toast.success("Produit supprimé avec succès");
+    } catch (error) {
+      console.error("Erreur lors de la suppression", error);
+      // toast.error("Impossible de supprimer ce produit");
     }
   };
   const fetchProducts = async () => {
@@ -49,9 +60,20 @@ const ProductTable = () => {
 
   return (
     <div className="p-0  min-h-full">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">
-        Product List Admin
-      </h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-3xl font-bold mb-6 text-gray-800">
+          Product List Admin
+        </h2>
+        <div>
+          <Button
+            onClick={() => {
+              navigate("/admin/produits/add");
+            }}
+          >
+            Ajouter un produit
+          </Button>
+        </div>
+      </div>
 
       {/* Table Container with scroll for small screens */}
       <div className="overflow-x-auto shadow-lg rounded-lg">
@@ -129,14 +151,41 @@ const ProductTable = () => {
                   {/* Separator */}
                   <span className="text-gray-300">|</span>
 
-                  {/* Delete Button */}
-                  <button
-                    onClick={() => handleDelete(product.id)}
-                    className="text-red-600 hover:text-red-900 mx-1 transition duration-150 ease-in-out font-medium"
-                    aria-label={`Delete ${product.name}`}
-                  >
-                    Delete
-                  </button>
+                  {/* POPOVER DELETE CONFIRMATION */}
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      {/* We use asChild so the Popover uses your existing button styles */}
+                      <button
+                        className="text-red-600 hover:text-red-900 mx-1 transition duration-150 ease-in-out font-medium outline-none"
+                        aria-label={`Delete ${product.nom}`}
+                      >
+                        Delete
+                      </button>
+                    </PopoverTrigger>
+
+                    <PopoverContent className="w-64 p-4 bg-white shadow-xl border border-gray-100 rounded-lg">
+                      <div className="space-y-4">
+                        <h4 className="font-semibold text-gray-900">
+                          Confirmer la suppression ?
+                        </h4>
+                        <p className="text-sm text-gray-500">
+                          Cette action est irréversible. Le produit sera retiré
+                          de la base de données.
+                        </p>
+                        <div className="flex justify-end space-x-2">
+                          {/* The backend delete is triggered only here */}
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="text-white"
+                            onClick={() => handleDelete(product.id)}
+                          >
+                            Supprimer
+                          </Button>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </td>
               </tr>
             ))}

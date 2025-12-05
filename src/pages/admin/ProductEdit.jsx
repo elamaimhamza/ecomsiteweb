@@ -69,42 +69,6 @@ const Input = ({ className = "", ...props }) => (
   />
 );
 
-// Select Component
-const Selecté = ({
-  name,
-  value,
-  onChange,
-  options,
-  placeholder,
-  className = "",
-}) => (
-  <div className="relative">
-    <select
-      name={name}
-      value={value}
-      onChange={onChange}
-      required
-      className={`
-        appearance-none flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm
-        ring-offset-white placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2
-        focus-visible:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50
-        pr-8 transition-colors
-        ${className}
-      `}
-    >
-      <option value="" disabled>
-        {placeholder}
-      </option>
-      {options.map((option) => (
-        <option key={option} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
-  </div>
-);
-
 // Loader Icon (for saving state)
 const LoaderIcon = ({ className = "" }) => (
   <Loader2 className={`animate-spin h-4 w-4 ${className}`} />
@@ -430,17 +394,6 @@ const ProductEdit = () => {
             </Button>
           </div>
         </form>
-
-        {/* Aperçu de l'état actuel des données */}
-        <div className="mt-10 pt-6 border-t border-gray-200">
-          <h3 className="text-xl font-semibold mb-4 text-gray-700 flex items-center">
-            <Tags className="h-5 w-5 mr-2 text-gray-500" /> État Actuel du
-            Produit
-          </h3>
-          <pre className="bg-gray-100 p-4 rounded-lg text-xs overflow-x-auto text-gray-800 border border-gray-200 shadow-inner">
-            {JSON.stringify(product, null, 2)}
-          </pre>
-        </div>
       </div>
     </div>
   );
