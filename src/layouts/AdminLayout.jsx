@@ -4,7 +4,7 @@ import { LayoutDashboard, ListCollapse } from "lucide-react";
 export default function AdminLayout() {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen flex bg-gray-100 max-h-screen overflow-hidden">
       {/* SIDEBAR */}
       <aside className="w-64 bg-white shadow-md p-5 flex flex-col">
         <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
@@ -43,7 +43,7 @@ export default function AdminLayout() {
               </div>
             </NavLink>
           </div>
-          <div>
+          <div >
             <Button
               variant="outline"
               onClick={() => {
@@ -57,7 +57,7 @@ export default function AdminLayout() {
       </aside>
 
       {/* MAIN CONTENT */}
-      <div className="flex-1 p-6">
+      <div className="flex-1 p-6 overflow-auto">
         <main>
           <Outlet />
         </main>

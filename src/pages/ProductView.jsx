@@ -22,10 +22,12 @@ export default function ProductView() {
   const token = localStorage.getItem("jwt");
 
   const handleAddToCart = () => {
+    console.log("product", product);
     const productData = {
       id: product.id,
       nom: product.nom,
       prix: product.prix,
+      image: product.image,
       quantity: 1,
     };
 

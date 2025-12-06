@@ -14,6 +14,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import ProductTable from "./pages/admin/ProductList.jsx";
 import ProductEdit from "./pages/admin/ProductEdit.jsx";
 import { ProductCreate } from "./pages/admin/ProductCreate.jsx";
+import CartConfirmation from "./pages/CartConfirmation.jsx";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/panier" element={<CartConfirmation />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductView />} />
           <Route

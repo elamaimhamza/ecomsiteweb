@@ -6,27 +6,21 @@ import {
   LogOutIcon,
   ShoppingCart,
   UserIcon,
-  X,
 } from "lucide-react";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Cart from "./cart";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Nav() {
-  const [isPanierOpen, setIsPanierOpen] = useState(false);
+  const navigate = useNavigate();
   const { user, logout, loading, isAdmin } = useAuth();
   return (
     <div>
       <header className="relative">
         <div className="fixed top-0 w-full z-[100] items-center justify-between flex bg-gray-800 bg-opacity-90 px-12 py-4 mx-auto ">
           <div className="text-2xl text-white font-semibold inline-flex items-center gap-2">
-            {/* <Logo /> */}
             <Link to="/">
               <HomeIcon />
             </Link>
-            {/* {isAdmin && (
-              
-            )} */}
           </div>
           {isAdmin && (
             <div className="absolute text-white right-1/2 translate-x-1/2">
@@ -43,9 +37,9 @@ export default function Nav() {
             <ul className="flex items-center text-white">
               <div
                 onClick={() => {
-                  setIsPanierOpen(!isPanierOpen);
+                  navigate("/panier");
                 }}
-                className="flex w-8 h-8 items-center p-1 bg-neutral-100/50 rounded-sm border border-neutral-200 cursor-pointer hover:bg-neutral-100/20 transition-all duration-150"
+                className="flex w-8 h-8 items-center p-1 rounded-sm cursor-pointer hover:bg-neutral-100/20 transition-all duration-150"
               >
                 <ShoppingCart className=" text-white" />
               </div>
@@ -82,7 +76,6 @@ export default function Nav() {
             </ul>
           </div>
         </div>
-        <Cart isPanierOpen={isPanierOpen} setIsPanierOpen={setIsPanierOpen} />
       </header>
     </div>
   );

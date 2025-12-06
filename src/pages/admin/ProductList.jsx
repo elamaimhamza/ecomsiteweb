@@ -9,9 +9,10 @@ import {
 } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { SquarePen, Trash2, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const ProductTable = () => {
-  const token = localStorage.getItem("jwt");
+  let token = localStorage.getItem("jwt");
   const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({
@@ -73,7 +74,12 @@ const ProductTable = () => {
   }, []);
 
   // 1. Reusable Pagination Component to avoid code duplication
-  const PaginationControl = ({ pagination, onPageChange, isLoading }) => {
+  const PaginationControl = ({
+    pagination,
+    onPageChange,
+    isLoading,
+    className,
+  }) => {
     // Safety check
     if (!pagination || !pagination.last_page || pagination.last_page <= 1)
       return null;
@@ -122,7 +128,12 @@ const ProductTable = () => {
     };
 
     return (
-      <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+      <div
+        className={cn(
+          "bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 " +
+            className
+        )}
+      >
         {/* Mobile View: Simple Prev/Next */}
         <div className="flex-1 flex justify-between sm:hidden">
           <button
@@ -266,19 +277,20 @@ const ProductTable = () => {
       </div>
 
       {/* --- TOP PAGINATION --- */}
-      <div className="border-b border-gray-200">
+      <div className="border-b  border-gray-200">
         <PaginationControl
           pagination={pagination}
           onPageChange={fetchProducts}
           isLoading={isLoading}
+          className={"rounded-t-lg"}
         />
       </div>
 
       {/* --- TABLE CONTAINER (Relative for loading overlay) --- */}
-      <div className="relative overflow-x-auto">
+      <div className="relative overflow-x-auto min-h-[400px]">
         {/* LOADING SPINNER OVERLAY */}
         {isLoading && (
-          <div className="absolute inset-0 bg-white/80 z-20 flex items-center justify-center backdrop-blur-[1px]">
+          <div className="absolute inset-0 min-h-[400px] bg-white/80 z-20 flex items-center justify-center backdrop-blur-[1px]">
             <div className="flex flex-col items-center">
               <Loader2 className="h-10 w-10 animate-spin text-indigo-600 mb-2" />
               <span className="text-sm font-medium text-gray-500">
@@ -417,6 +429,7 @@ const ProductTable = () => {
           pagination={pagination}
           onPageChange={fetchProducts}
           isLoading={isLoading}
+          className={"rounded-b-lg"}
         />
       </div>
     </div>

@@ -1,12 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "@/api/axios";
 import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [loadingAdmin, setLoadingAdmin] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const token = localStorage.getItem("jwt");
@@ -14,21 +15,17 @@ export const AuthProvider = ({ children }) => {
 
   // Load user from localStorage and verify token
   useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      verifyToken(token);
+    // Move logic inside to ensure it runs on mount/refresh
+    const storedToken = localStorage.getItem("jwt");
+
+    if (storedToken) {
+      verifyToken(storedToken);
     } else {
+      // If no token, we are done loading (user is guest)
       setLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-    if (token) {
-      verifyAdmin(token);
-    } else {
-      setIsAdmin(false);
-    }
-  }, [token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run once on mount
 
   const verifyToken = async (token) => {
     try {
@@ -48,6 +45,7 @@ export const AuthProvider = ({ children }) => {
           email: resData.email,
         };
         setUser(userData); // assuming backend returns { valid: true, user: {...} }
+        await verifyAdmin(token);
       } else {
         logout();
       }
@@ -117,8 +115,17 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("user");
     setUser(null);
+    setIsAdmin(false);
     window.location.reload();
   };
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 size={36} className="animate-spin" />
+      </div>
+    ); // Or a Spinner component
+  }
 
   return (
     <AuthContext.Provider

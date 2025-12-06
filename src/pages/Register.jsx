@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import api from "@/api/axios";
 
@@ -140,10 +140,15 @@ export default function Register() {
             />
           </div>
         </div>
+        <div className="flex items-center justify-between">
+          <Link to="/login" className="underline">
+            avez-vous déjà un compte ?
+          </Link>
 
-        <Button type="submit" className="w-full bg-sky-800 mt-4">
-          S'inscrire
-        </Button>
+          <Button type="submit" className="w-1/2 bg-sky-800">
+            S'inscrire
+          </Button>
+        </div>
       </form>
     </div>
   );
