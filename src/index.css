@@ -2,7 +2,6 @@
 @plugin "tailwindcss-animate";
 @custom-variant dark (&:is(.dark *));
 
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -120,30 +119,33 @@
 }
 
 .centered {
-  @apply flex justify-center items-center
+  @apply flex justify-center items-center;
 }
 
+body {
+  font-family: "Exo";
+}
 
 /* width */
 .modern-scrollbar::-webkit-scrollbar {
-width: 4px;
-padding: 8px;
+  width: 4px;
+  padding: 8px;
 }
 
 /* Track */
 .modern-scrollbar::-webkit-scrollbar-track {
-padding: 8px;
-background: #f1f1f1;
+  padding: 8px;
+  background: #f1f1f1;
 }
 
 /* Handle */
 .modern-scrollbar::-webkit-scrollbar-thumb {
-background: #888;
-padding: 8px;
-border-radius: 8px;
+  background: #888;
+  padding: 8px;
+  border-radius: 8px;
 }
 
 /* Handle on hover */
 .modern-scrollbar::-webkit-scrollbar-thumb:hover {
-background: #555;
+  background: #555;
 }

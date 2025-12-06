@@ -220,17 +220,20 @@ export default function CartConfirmation() {
                   Votre panier est vide.
                 </div>
               ) : (
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y divide-gray-100 ">
                   {cartItems.map((item) => (
                     <div
                       key={item.id}
-                      className="p-6 flex flex-col sm:flex-row gap-6 transition-colors hover:bg-gray-50/50"
+                      className="p-6 flex flex-col sm:flex-row gap-6 transition-colors hover:bg-gray-50/50 group"
                     >
                       {/* Image Placeholder */}
                       <div className="w-full sm:w-32 h-32 bg-gray-100 rounded-md flex-shrink-0 flex items-center justify-center text-gray-400">
                         <img
                           src={item.image}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-contain cursor-pointer"
+                          onClick={() => {
+                            navigate("/products/" + item.id);
+                          }}
                         />
                       </div>
 
@@ -239,7 +242,7 @@ export default function CartConfirmation() {
                         <div className="flex justify-between items-start">
                           <div>
                             <h3
-                              className="text-lg font-medium text-gray-900 cursor-pointer hover:underline "
+                              className="text-lg font-medium text-gray-900 cursor-pointer group-hover:underline"
                               onClick={() => {
                                 navigate("/products/" + item.id);
                               }}
