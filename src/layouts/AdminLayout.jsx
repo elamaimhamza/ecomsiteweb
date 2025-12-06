@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
-
+import { LayoutDashboard, ListCollapse } from "lucide-react";
 export default function AdminLayout() {
   const navigate = useNavigate();
   return (
@@ -22,7 +22,10 @@ export default function AdminLayout() {
               }
               end
             >
-              Dashboard
+              <div className="flex justify-items-center gap-2">
+                <LayoutDashboard />
+                Dashboard
+              </div>
             </NavLink>
             <NavLink
               to="/admin/produits"
@@ -34,7 +37,10 @@ export default function AdminLayout() {
                 }`
               }
             >
-              Produits
+              <div className="flex justify-items-center gap-2">
+                <ListCollapse />
+                Produits
+              </div>
             </NavLink>
           </div>
           <div>
