@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import api from "@/api/axios";
 
@@ -17,6 +17,8 @@ export default function Register() {
   });
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const isFromCart = location.state?.fromCart || false;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,7 +31,7 @@ export default function Register() {
       .post("/register", formData)
       .then(() => {
         toast.success("Utilisateur créé avec succès");
-        navigate("/login");
+        navigate("/login", { state: { fromCart: isFromCart } });
       })
       .catch((err) => {
         if (
@@ -141,7 +143,7 @@ export default function Register() {
           </div>
         </div>
         <div className="flex items-center justify-between">
-          <Link to="/login" className="underline">
+          <Link to="/login" state={{ fromCart: true }} className="underline">
             avez-vous déjà un compte ?
           </Link>
 

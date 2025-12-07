@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (email, mot_de_passe) => {
+  const login = async (email, mot_de_passe, isFromCart = false) => {
     try {
       setLoading(true);
       const res = await api.post("/login", { email, mot_de_passe });
@@ -72,11 +72,15 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("jwt", data.data.api_token);
         setUser(userData);
-        const admin = await verifyAdmin(data.data.api_token);
-        if (admin) {
-          navigate("/admin");
+        if (isFromCart) {
+          navigate("/panier");
         } else {
-          navigate("/admin");
+          const admin = await verifyAdmin(data.data.api_token);
+          if (admin) {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
         }
       }
       return data;

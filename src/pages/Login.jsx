@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", mot_de_passe: "" });
   const { login, loading, loadingAdmin } = useAuth();
+  const location = useLocation();
+  const isFromCart = location.state?.fromCart || false;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,7 +17,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await login(formData.email, formData.mot_de_passe)
+    await login(formData.email, formData.mot_de_passe, isFromCart)
       .then(() => {
         toast.success("connexion avec success", {
           position: "top-center",

@@ -1,4 +1,5 @@
 import api from "@/api/axios";
+import { useAuth } from "@/context/AuthContext";
 import {
   Loader2,
   Truck,
@@ -34,15 +35,17 @@ const DELIVERY_OPTIONS = [
 ];
 
 export default function CartConfirmation() {
+  let token = localStorage.getItem("jwt");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); // Global loading for payment
   const [dataLoading, setDataLoading] = useState(true); // Initial data fetch
   const [cartItems, setCartItems] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
   const [selectedDelivery, setSelectedDelivery] = useState(DELIVERY_OPTIONS[0]);
-
   // NEW: Track which items are currently updating (prevent double clicks)
   const [updatingItems, setUpdatingItems] = useState(new Set());
+
+  const { user } = useAuth();
 
   // Helper to toggle loading state for a specific ID
   const setItemLoading = (id, isLoading) => {
@@ -178,19 +181,48 @@ export default function CartConfirmation() {
     }
   };
 
-  // --- 3. PAYMENT HANDLER ---
   const handleConfirm = async () => {
-    if (cartItems.length === 0) {
-      toast.error("Votre panier est vide");
-      return;
-    }
+    if (cartItems.length === 0) return;
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/payment");
-    }, 1500);
-  };
+    console.log("USER", user);
+    if (!user) {
+      console.log("USER NOT AUTHENTICATED");
+      navigate("/register", { state: { fromCart: true } });
+    } else {
+      try {
+        // Prepare the payload
+        const payload = {
+          items: cartItems.map((item) => ({
+            id: item.id,
+            quantity: item.quantity,
+          })),
+          delivery: {
+            id: selectedDelivery.id,
+            title: selectedDelivery.title,
+            price: selectedDelivery.price,
+          },
+        };
 
+        // Call Laravel Backend
+        const res = await api.post("/create-checkout-session", payload, {
+          headers: { Authorization: "Bearer " + token },
+        });
+
+        if (res.data.url) {
+          // Redirect to Stripe
+          window.location.href = res.data.url;
+        } else {
+          console.error("No URL returned");
+          toast.error("Erreur de paiement");
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Payment Error:", error);
+        toast.error("Erreur lors de l'initialisation du paiement");
+        setLoading(false);
+      }
+    }
+  };
   const finalTotal = subtotal + selectedDelivery.price;
 
   if (dataLoading)
