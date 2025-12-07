@@ -16,6 +16,8 @@ import ProductEdit from "./pages/admin/ProductEdit.jsx";
 import { ProductCreate } from "./pages/admin/ProductCreate.jsx";
 import CartConfirmation from "./pages/CartConfirmation.jsx";
 import Success from "./pages/Success.jsx";
+import AdminOrders from "./pages/AdminOrders.jsx";
+import AdminOrderDetails from "./pages/AdminOrderDetails.jsx";
 
 export default function App() {
   return (
@@ -51,6 +53,8 @@ export default function App() {
           <Route path="produits" element={<ProductTable />} />
           <Route path="produits/edit/:id" element={<ProductEdit />} />
           <Route path="produits/add" element={<ProductCreate />} />
+          <Route path="commandes" element={<AdminOrders />} />
+          <Route path="commandes/:id" element={<AdminOrderDetails />} />
         </Route>
       </Routes>
     </>

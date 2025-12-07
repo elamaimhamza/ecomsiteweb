@@ -201,6 +201,7 @@ export default function CartConfirmation() {
             title: selectedDelivery.title,
             price: selectedDelivery.price,
           },
+          email: user?.email,
         };
 
         // Call Laravel Backend

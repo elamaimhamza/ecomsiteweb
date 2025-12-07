@@ -42,8 +42,23 @@ export default function AdminLayout() {
                 Produits
               </div>
             </NavLink>
+            <NavLink
+              to="/admin/commandes"
+              className={({ isActive }) =>
+                `text-gray-700  px-3 py-2 rounded-sm ${
+                  isActive
+                    ? "bg-zinc-800 text-white"
+                    : "bg-transparent hover:bg-zinc-200"
+                }`
+              }
+            >
+              <div className="flex justify-items-center gap-2">
+                <ListCollapse />
+                Commandes
+              </div>
+            </NavLink>
           </div>
-          <div >
+          <div>
             <Button
               variant="outline"
               onClick={() => {
