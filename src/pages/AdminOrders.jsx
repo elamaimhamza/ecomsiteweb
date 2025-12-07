@@ -16,10 +16,6 @@ import { toast } from "sonner";
 
 // Mapping status to colors/icons for better UI
 const STATUS_CONFIG = {
-  "En attente": {
-    color: "bg-yellow-100 text-yellow-800 border-yellow-200",
-    icon: Loader2,
-  },
   Payée: {
     color: "bg-green-100 text-green-800 border-green-200",
     icon: CheckCircle,
