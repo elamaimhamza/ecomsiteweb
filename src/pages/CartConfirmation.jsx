@@ -17,19 +17,19 @@ const DELIVERY_OPTIONS = [
     id: "bpost_home",
     title: "Bpost Domicile",
     detail: "2-3 jours",
-    price: 6.95,
+    price: 3.99,
   },
   {
     id: "mondial_relay",
     title: "Point Relais",
     detail: "Mondial Relay",
-    price: 4.5,
+    price: 3.49,
   },
   {
     id: "express",
     title: "Express BE",
     detail: "Lendemain (si <15h)",
-    price: 12.95,
+    price: 6.99,
   },
 ];
 
@@ -323,71 +323,75 @@ export default function CartConfirmation() {
 
           {/* --- RIGHT COLUMN: SUMMARY --- */}
           <div className="lg:col-span-4">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 sticky top-6">
-              <h2 className="text-xl font-semibold mb-6">Résumé</h2>
+            {cartItems.length == 0 ? (
+              <></>
+            ) : (
+              <>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 sticky top-6">
+                  <h2 className="text-xl font-semibold mb-6">Résumé</h2>
+                  <div className="flex justify-between text-gray-600 mb-2">
+                    <span>Sous-total</span>
+                    <span>{subtotal.toFixed(2)} €</span>
+                  </div>
 
-              {/* Subtotal */}
-              <div className="flex justify-between text-gray-600 mb-2">
-                <span>Sous-total</span>
-                <span>{subtotal.toFixed(2)} €</span>
-              </div>
+                  <div className="border-t border-gray-100 my-4"></div>
 
-              <div className="border-t border-gray-100 my-4"></div>
+                  {/* Delivery Selection */}
+                  <h3 className="text-sm font-medium text-gray-900 mb-3">
+                    Livraison
+                  </h3>
+                  <div className="space-y-3 mb-6">
+                    {DELIVERY_OPTIONS.map((option) => (
+                      <div
+                        key={option.id}
+                        onClick={() => setSelectedDelivery(option)}
+                        className={`cursor-pointer border rounded-lg p-3 flex justify-between items-center transition-all ${
+                          selectedDelivery.id === option.id
+                            ? "border-neutral-900 bg-neutral-50 ring-1 ring-neutral-900"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                      >
+                        <div className="flex flex-col">
+                          <span className="font-medium text-sm text-gray-900">
+                            {option.title}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {option.detail}
+                          </span>
+                        </div>
+                        <span className="font-medium text-sm">
+                          {option.price} €
+                        </span>
+                      </div>
+                    ))}
+                  </div>
 
-              {/* Delivery Selection */}
-              <h3 className="text-sm font-medium text-gray-900 mb-3">
-                Livraison
-              </h3>
-              <div className="space-y-3 mb-6">
-                {DELIVERY_OPTIONS.map((option) => (
-                  <div
-                    key={option.id}
-                    onClick={() => setSelectedDelivery(option)}
-                    className={`cursor-pointer border rounded-lg p-3 flex justify-between items-center transition-all ${
-                      selectedDelivery.id === option.id
-                        ? "border-neutral-900 bg-neutral-50 ring-1 ring-neutral-900"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <div className="flex flex-col">
-                      <span className="font-medium text-sm text-gray-900">
-                        {option.title}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {option.detail}
-                      </span>
-                    </div>
-                    <span className="font-medium text-sm">
-                      {option.price} €
+                  <div className="border-t border-gray-100 my-4"></div>
+
+                  {/* Final Total */}
+                  <div className="flex justify-between items-center mb-6">
+                    <span className="text-lg font-bold text-gray-900">
+                      Total TTC
+                    </span>
+                    <span className="text-2xl font-bold text-gray-900">
+                      {finalTotal.toFixed(2)} €
                     </span>
                   </div>
-                ))}
-              </div>
 
-              <div className="border-t border-gray-100 my-4"></div>
-
-              {/* Final Total */}
-              <div className="flex justify-between items-center mb-6">
-                <span className="text-lg font-bold text-gray-900">
-                  Total TTC
-                </span>
-                <span className="text-2xl font-bold text-gray-900">
-                  {finalTotal.toFixed(2)} €
-                </span>
-              </div>
-
-              <button
-                onClick={handleConfirm}
-                disabled={loading || cartItems.length === 0}
-                className="w-full bg-neutral-900 text-white font-bold py-4 rounded-lg hover:bg-neutral-800 transition-colors flex justify-center items-center gap-2 disabled:bg-neutral-400 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  "Procéder au paiement"
-                )}
-              </button>
-            </div>
+                  <button
+                    onClick={handleConfirm}
+                    disabled={loading || cartItems.length === 0}
+                    className="w-full bg-neutral-900 text-white font-bold py-4 rounded-lg hover:bg-neutral-800 transition-colors flex justify-center items-center gap-2 disabled:bg-neutral-400 disabled:cursor-not-allowed"
+                  >
+                    {loading ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      "Procéder au paiement"
+                    )}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
