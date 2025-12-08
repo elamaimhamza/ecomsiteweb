@@ -20,10 +20,7 @@ import { toast } from "sonner";
 
 // Status Colors Config (Reused)
 const STATUS_CONFIG = {
-  "En attente": {
-    color: "text-yellow-700 bg-yellow-50 border-yellow-200",
-    icon: Loader2,
-  },
+  
   Payée: {
     color: "text-green-700 bg-green-50 border-green-200",
     icon: CheckCircle,
@@ -93,7 +90,7 @@ export default function AdminOrderDetails() {
         {/* TOP NAVIGATION */}
         <div className="flex items-center justify-between mb-6">
           <button
-            onClick={() => navigate("/admin/orders")}
+            onClick={() => navigate("/admin/commandes")}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
           >
             <ArrowLeft size={20} /> Retour à la liste
@@ -101,7 +98,7 @@ export default function AdminOrderDetails() {
 
           <div className="flex gap-3">
             <button
-              onClick={() => document.print()}
+              onClick={() => window.print()}
               className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors"
             >
               <Printer size={16} /> Imprimer
