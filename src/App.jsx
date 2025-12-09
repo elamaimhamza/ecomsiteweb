@@ -18,6 +18,7 @@ import CartConfirmation from "./pages/CartConfirmation.jsx";
 import Success from "./pages/Success.jsx";
 import AdminOrders from "./pages/AdminOrders.jsx";
 import AdminOrderDetails from "./pages/AdminOrderDetails.jsx";
+import OrdersPage from './pages/OrdersPage';
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/mes-commandes" element={<OrdersPage />} />
           <Route path="/*" element={<NotFound />} />
         </Route>
         <Route
