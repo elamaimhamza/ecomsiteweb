@@ -16,33 +16,43 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      // 1. Attempt login
+      const data = await login(
+        formData.email,
+        formData.mot_de_passe,
+        isFromCart
+      );
 
-    await login(formData.email, formData.mot_de_passe, isFromCart)
-      .then(() => {
-        toast.success("connexion avec success", {
+      // 2. If we get here, login was successful
+      toast.success("connexion avec success", {
+        position: "top-center",
+        dismissible: true,
+        closeButton: true,
+      });
+      // navigate("/"); // Uncomment if needed
+
+      console.log("LOGIN DATA", data);
+    } catch (err) {
+      // 3. If login throws, we land here immediately
+      console.log("error status", err.response?.status);
+
+      if (err.response && err.response.status === 401) {
+        toast.error("Connexion echec", {
+          description: err.response.data.message,
           position: "top-center",
           dismissible: true,
           closeButton: true,
         });
-        // navigate("/");
-      })
-      .catch((err) => {
-        console.log("error status", err.response.status);
-        if (err.response.status == 401) {
-          toast.error("Connexion echec", {
-            description: err.response.data.message,
-            position: "top-center",
-            dismissible: true,
-            closeButton: true,
-          });
-        } else {
-          toast.error("Connexion echec", {
-            position: "top-center",
-            dismissible: true,
-            closeButton: true,
-          });
-        }
-      });
+      } else {
+        toast.error("Connexion echec", {
+          description: "Une erreur est survenue", // Added generic description
+          position: "top-center",
+          dismissible: true,
+          closeButton: true,
+        });
+      }
+    }
   };
 
   return (

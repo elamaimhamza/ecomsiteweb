@@ -123,13 +123,13 @@ export const AuthProvider = ({ children }) => {
     window.location.reload();
   };
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 size={36} className="animate-spin" />
-      </div>
-    ); // Or a Spinner component
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex h-screen items-center justify-center">
+  //       <Loader2 size={36} className="animate-spin" />
+  //     </div>
+  //   ); // Or a Spinner component
+  // }
 
   return (
     <AuthContext.Provider
