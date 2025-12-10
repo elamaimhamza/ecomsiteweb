@@ -16,9 +16,10 @@ import ProductEdit from "./pages/admin/ProductEdit.jsx";
 import { ProductCreate } from "./pages/admin/ProductCreate.jsx";
 import CartConfirmation from "./pages/CartConfirmation.jsx";
 import Success from "./pages/Success.jsx";
-import AdminOrders from "./pages/AdminOrders.jsx";
-import AdminOrderDetails from "./pages/AdminOrderDetails.jsx";
-import OrdersPage from './pages/OrdersPage';
+import AdminOrders from "./pages/admin/AdminOrders.jsx";
+import AdminOrderDetails from "./pages/admin/AdminOrderDetails.jsx";
+import OrdersPage from "./pages/OrdersPage";
+import OrderDetailsPage from "./pages/OrderDetailsPage.jsx";
 
 export default function App() {
   return (
@@ -40,7 +41,11 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/mes-commandes" element={<OrdersPage />} />
+          <Route path="/mes-commandes" element={<ProtectedRoute />}>
+            <Route index element={<OrdersPage />} />
+            {/* Remove the leading slash here. "path=':id'" implies "/mes-commandes/:id" */}
+            <Route path=":id" element={<OrderDetailsPage />} />
+          </Route>
           <Route path="/*" element={<NotFound />} />
         </Route>
         <Route
