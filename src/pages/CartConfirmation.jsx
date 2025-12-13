@@ -40,8 +40,10 @@ export default function CartConfirmation() {
   const [loading, setLoading] = useState(false); // Global loading for payment
   const [dataLoading, setDataLoading] = useState(true); // Initial data fetch
   const [cartItems, setCartItems] = useState([]);
+  const [deliveryOptions, setDeliveryOptions] = useState([]);
+  const [selectedDelivery, setSelectedDelivery] = useState();
   const [subtotal, setSubtotal] = useState(0);
-  const [selectedDelivery, setSelectedDelivery] = useState(DELIVERY_OPTIONS[0]);
+  const [finalTotal, setFinalTotal] = useState(0);
   // NEW: Track which items are currently updating (prevent double clicks)
   const [updatingItems, setUpdatingItems] = useState(new Set());
 
@@ -111,10 +113,22 @@ export default function CartConfirmation() {
     }
   };
 
-  // Initial Load
-  useEffect(() => {
-    refreshCart();
-  }, []);
+  const fetchDeliveryOptions = async () => {
+    try {
+      await api
+        .get("/delivery-options", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        })
+        .then((res) => {
+          setDeliveryOptions(res.data.data);
+        })
+        .catch((err) => console.error);
+    } catch (err) {
+      console.error("Error while fetching dilevary options");
+    }
+  };
 
   // --- 2. YOUR CART FUNCTIONS (Integrated) ---
 
@@ -198,8 +212,8 @@ export default function CartConfirmation() {
           })),
           delivery: {
             id: selectedDelivery.id,
-            title: selectedDelivery.title,
-            price: selectedDelivery.price,
+            title: selectedDelivery.nom,
+            price: selectedDelivery.prix,
           },
           email: user?.email,
         };
@@ -224,7 +238,46 @@ export default function CartConfirmation() {
       }
     }
   };
-  const finalTotal = subtotal + selectedDelivery.price;
+
+  // CALCULATE SUBTOTAL
+  useEffect(() => {
+    const total = cartItems.reduce((acc, item) => {
+      console.log("ITEM", item);
+      // Force conversion to numbers, default to 0 if missing
+      const price = parseFloat(item.prix) || 0;
+      const qty = parseInt(item.quantity) || 1;
+      return acc + price * qty;
+    }, 0);
+    setSubtotal(total);
+  }, [cartItems]);
+
+  useEffect(() => {
+    // Ensure subtotal is a number
+    let total = parseFloat(subtotal) || 0;
+
+    if (selectedDelivery) {
+      // Ensure delivery price is a number
+      const deliveryPrice =
+        parseFloat(selectedDelivery.prix) ||
+        parseFloat(selectedDelivery.price) ||
+        0;
+      total += deliveryPrice;
+    }
+
+    setFinalTotal(total);
+  }, [subtotal, selectedDelivery]);
+
+  useEffect(() => {
+    if (deliveryOptions || !selectedDelivery) {
+      setSelectedDelivery(deliveryOptions[0]);
+    }
+  }, [deliveryOptions]);
+
+  // Initial Load
+  useEffect(() => {
+    refreshCart();
+    fetchDeliveryOptions();
+  }, []);
 
   if (dataLoading)
     return (
@@ -374,29 +427,41 @@ export default function CartConfirmation() {
                     Livraison
                   </h3>
                   <div className="space-y-3 mb-6">
-                    {DELIVERY_OPTIONS.map((option) => (
-                      <div
-                        key={option.id}
-                        onClick={() => setSelectedDelivery(option)}
-                        className={`cursor-pointer border rounded-lg p-3 flex justify-between items-center transition-all ${
-                          selectedDelivery.id === option.id
-                            ? "border-neutral-900 bg-neutral-50 ring-1 ring-neutral-900"
-                            : "border-gray-200 hover:border-gray-300"
-                        }`}
-                      >
-                        <div className="flex flex-col">
-                          <span className="font-medium text-sm text-gray-900">
-                            {option.title}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            {option.detail}
+                    {deliveryOptions.length > 0 ? (
+                      deliveryOptions.map((option) => (
+                        <div
+                          key={option.id}
+                          onClick={() => setSelectedDelivery(option)}
+                          // className={`cursor-pointer border rounded-lg p-3 flex justify-between items-center transition-all ${
+                          //   selectedDelivery.id === option.id
+                          //     ? "border-neutral-900 bg-neutral-50 ring-1 ring-neutral-900"
+                          //     : "border-gray-200 hover:border-gray-300"
+                          // }`}
+                          className={`cursor-pointer border rounded-lg p-3 flex justify-between items-center transition-all ${
+                            // SAFETY CHECK: Ensure selectedDelivery is not null before checking ID
+                            selectedDelivery &&
+                            selectedDelivery.id === option.id
+                              ? "border-neutral-900 bg-neutral-50 ring-1 ring-neutral-900"
+                              : "border-gray-200 hover:border-gray-300"
+                          }`}
+                        >
+                          <div className="flex flex-col">
+                            <span className="font-medium text-sm text-gray-900">
+                              {option.nom}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {option.details}
+                            </span>
+                          </div>
+                          <span className="font-medium text-sm">
+                            {/* {option.prix} € */}
+                            {parseFloat(option.prix).toFixed(2)}
                           </span>
                         </div>
-                        <span className="font-medium text-sm">
-                          {option.price} €
-                        </span>
-                      </div>
-                    ))}
+                      ))
+                    ) : (
+                      <></>
+                    )}
                   </div>
 
                   <div className="border-t border-gray-100 my-4"></div>

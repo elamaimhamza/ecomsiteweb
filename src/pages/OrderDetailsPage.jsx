@@ -22,10 +22,12 @@ const OrderDetailsPage = () => {
   let token = localStorage.getItem("jwt");
   // Helper: Format Price
   const formatPrice = (price) => {
+    const numericPrice = parseFloat(price) || 0;
+
     return new Intl.NumberFormat("fr-FR", {
       style: "currency",
       currency: "EUR",
-    }).format(price);
+    }).format(numericPrice);
   };
 
   // Helper: Format Date
@@ -194,16 +196,23 @@ const OrderDetailsPage = () => {
               <div className="space-y-3 text-sm text-gray-600">
                 <div className="flex justify-between">
                   <span>Sous-total</span>
-                  <span>{formatPrice(order.total)}</span>{" "}
+                  <span>
+                    {formatPrice(
+                      parseFloat(order.montant_total) -
+                        parseFloat(order.livraison?.transporteur?.prix || 0)
+                    )}
+                  </span>
                   {/* Adjust if you have separate subtotal */}
                 </div>
                 <div className="flex justify-between">
                   <span>Livraison</span>
-                  <span className="text-green-600">Gratuite</span>
+                  <span className="text-green-600">
+                    {formatPrice(order.livraison.transporteur.prix)}
+                  </span>
                 </div>
                 <div className="border-t border-gray-100 pt-3 mt-3 flex justify-between font-bold text-lg text-gray-900">
                   <span>Total</span>
-                  <span>{formatPrice(order.total)}</span>
+                  <span>{formatPrice(order.montant_total)}</span>
                 </div>
               </div>
             </div>
