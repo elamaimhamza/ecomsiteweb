@@ -1,3 +1,5 @@
+import DecryptedText from "@/components/DecryptedText";
+import GradientText from "@/components/GradientText";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
@@ -27,8 +29,8 @@ const Home = () => {
   useEffect(() => {
     const verify = async () => {
       const token = localStorage.getItem("jwt");
-      if(token){
-        console.log("token verification sent")
+      if (token) {
+        console.log("token verification sent");
         await verifyToken(token);
       }
     };
@@ -37,10 +39,15 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-blue-50 flex flex-col items-center justify-center px-4 pt-16 pb-12">
-      <h1 className="text-4xl font-bold text-center mb-10 pt-4">
+      <h1 className="text-4xl font-bold text-center mb-10 pt-4 flex gap-2">
         Bienvenue{" "}
         {user ? (
-          <span className="text-indigo-700">{user.nom}</span>
+          <DecryptedText
+            speed={150}
+            text={`${user.nom}`}
+            animateOn="view"
+            revealDirection="center"
+          />
         ) : (
           "dans notre Boutique"
         )}
@@ -69,9 +76,7 @@ const Home = () => {
           </Link>
         ))}
       </div>
-     
     </div>
-    
   );
 };
 

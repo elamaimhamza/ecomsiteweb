@@ -218,7 +218,7 @@ export default function CartConfirmation() {
           email: user?.email,
         };
 
-        // Call Laravel Backend
+      
         const res = await api.post("/create-checkout-session", payload, {
           headers: { Authorization: "Bearer " + token },
         });
